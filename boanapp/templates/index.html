@@ -4,19 +4,16 @@
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Njane Labs - Data Science of Currencies</title>
-  <meta name="description"
-    content="A high-quality &amp; free Bootstrap admin dashboard template pack that comes with lots of templates and components.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" id="main-stylesheet" data-version="1.0.0"
     href="{% static 'styles/shards-dashboards.1.0.0.min.css' %}">
-  <link rel="stylesheet" href="{% static 'styles/extras.1.0.0.min.css' %}">
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
 </head>
 
 <body class="h-100">
@@ -117,7 +114,8 @@
                         &rarr;</button>
                     </div>
                   </div>
-                  <canvas height="130" style="max-width: 100% !important;" class="blog-overview-users"></canvas>
+                  <canvas id="myChart" height="120"></canvas>
+                  <!-- <canvas class="blog-overview-stats-small-4" id="myChart"></canvas> -->
                 </div>
               </div>
             </div>
@@ -135,28 +133,66 @@
               <a class="nav-link" href="#">Blog</a>
             </li>
           </ul>
-          <span class="copyright ml-auto my-auto mr-2">Copyright © 2018
+          <span class="copyright ml-auto my-auto mr-2">Copyright © 2019
             <a href="https://njanelabs.com" rel="nofollow">Njane Labs</a>
           </span>
         </footer>
       </main>
     </div>
   </div>
+  <script>
+    var ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ["Label 1", "Label 2", "Label 3", "Label 4", "Label 5", "Label 6", "Label 7"],
+        datasets: [{
+          label: 'Current Month',
+          fill: 'start',
+          data: [180, 240, 320, 230, 650, 590, 1200, 750, 940, 1420, 1200, 960, 1450, 1820, 2800, 2102, 1920, 3920, 3202, 3140, 2800, 3200, 3200, 3400, 2910, 3100, 4250],
+          backgroundColor: 'rgba(0,123,255,0.1)',
+          borderColor: 'rgba(0,123,255,1)',
+          pointBackgroundColor: '#ffffff',
+          pointHoverBackgroundColor: 'rgb(0,123,255)',
+          borderWidth: 1.5,
+          pointRadius: 0,
+          pointHoverRadius: 3
+        }, {
+          label: 'Past Month',
+          fill: 'start',
+          data: [380, 430, 120, 230, 410, 740, 472, 219, 391, 229, 400, 203, 301, 380, 291, 620, 700, 300, 630, 402, 320, 380, 289, 410, 300, 530, 630, 720, 780, 1200],
+          backgroundColor: 'rgba(255,65,105,0.1)',
+          borderColor: 'rgba(255,65,105,1)',
+          pointBackgroundColor: '#ffffff',
+          pointHoverBackgroundColor: 'rgba(255,65,105,1)',
+          borderDash: [3, 3],
+          borderWidth: 1,
+          pointRadius: 0,
+          pointHoverRadius: 2,
+          pointBorderColor: 'rgba(255,65,105,1)'
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              // beginAtZero: true,
+            }
+          }]
+        }
+      }
+    });
+  </script>
+
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
   <script src="https://unpkg.com/shards-ui@latest/dist/js/shards.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sharrre/2.0.1/jquery.sharrre.min.js"></script>
-  <script src="{% static 'scripts/extras.1.0.0.min.js' %}"></script>
-  <script src="{% static 'scripts/shards-dashboards.1.0.0.min.js' %}"></script>
+
   <script src="{% static 'scripts/app/app-blog-overview.1.0.0.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+
 </body>
 
 </html>
