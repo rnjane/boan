@@ -1,0 +1,8 @@
+export iqemail=''
+export iqpassword=''
+export sqlalchemy_uri=''
+export SECRET_KEY=''
+export DATABASE_NAME=''
+export POSTGRES_IP=''
+export USER=''
+export PASSWORD=''
