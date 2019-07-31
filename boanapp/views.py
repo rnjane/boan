@@ -1,12 +1,12 @@
-from django.shortcuts import render
-
-
-def index(request):
-    return render(request, 'index.html')
+from django.shortcuts import render, redirect
+from boanapp.pairs import assets
 
 
 def visualize_data(request):
-    return render(request, 'index.html')
+    context = {}
+    context['pairs'] = assets
+    context['hours'] = [hour for hour in range(24)]
+    return render(request, 'index.html', context)
 
 
 def get_data(request):
