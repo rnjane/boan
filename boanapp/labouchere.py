@@ -98,11 +98,7 @@ def new_array(old_array):
     return new_list
 
 
-arr = [0, 0, -1, -1, 1, -1, 1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 0, 1, 1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1,
-       1, -1, 1, 1, 1, -1, -1, 1, 1, 0, -1, -1, -1, -1, 1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, -1, -1, -1]
-
-for i in new_array(arr):
-    prophet(i)
-    print("Hole is {0} and profit is {1} and current_array is {2}".format(
-        hole, profit, current_array))
-print(profit)
+def get_profit(arr):
+    for i in new_array(arr):
+        prophet(i)
+    return profit
