@@ -1,8 +1,20 @@
-import time, datetime, os, json, ast, csv, pytz
+import time
+import datetime
+import os
+import json
+import ast
+import csv
+import pytz
 from iqoptionapi.stable_api import IQ_Option as api
 import pandas as pd
 from sqlalchemy import *
-from boanapp.pairs import assets
+assets = [
+    "AUDUSD", "AUDCAD", "USDCHF", "EURNOK", "AUDNZD", "GBPJPY", "EURAUD", "AUDCHF", "GBPCHF",
+    "GBPNZD", "EURGBP", "EURCAD", "EURNZD", "NZDCAD", "GBPCAD", "USDJPY", "NZDCHF", "USDNOK",
+    "EURUSD", "NZDJPY", "CADJPY", "GBPUSD", "AUDJPY", "USDCAD", "EURJPY", "CADCHF", "USDJPY-OTC",
+    "EURUSD-OTC", "EURGBP-OTC", "USDCHF-OTC", "EURJPY-OTC", "NZDUSD-OTC", "AUDCAD-OTC",
+    "GBPUSD-OTC", "EURRUB-OTC", "USDRUB-OTC", "GBPJPY-OTC"
+]
 
 
 def convert_date_time_to_epoch(inputdate):
@@ -26,21 +38,17 @@ def generate_times():
 
 def get_values():
     iqemail = os.environ.get('iqemail')
-    iqpasswd = os.environ.get('iqpasswd')
+    iqpasswd = os.environ.get('iqpassword')
     try:
         vals = api(iqemail, iqpasswd)
         print('successfully logged in')
     except Exception as e:
         print('Could not log in because of {0}'.format(e))
 
-    epoch_times = generate_times(finish_time, number_of_semi_days)
-
-    engine = create_engine(
-        os.environ.get('sqlalchemy_uri')
-    )
+    engine = create_engine(os.environ.get('sqlalchemy_uri'))
     connection = engine.connect()
     metadata = MetaData()
-    my_table = Table("boan_data", metadata, autoload_with=engine)
+    my_table = Table("boanapp_values", metadata, autoload_with=engine)
     for instrument in assets:
         print("getting values for {}".format(instrument))
         times = generate_times()
@@ -73,7 +81,7 @@ def get_values():
                     cdle_list.append(cdle)
                 else:
                     pass
-            print("Saving values for {}".format(instrument))
+            # print("Saving values for {}".format(instrument))
             connection.execute(my_table.insert(), cdle_list)
 
 
