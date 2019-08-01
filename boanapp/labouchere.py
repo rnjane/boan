@@ -103,17 +103,6 @@ arr = [0, 0, -1, -1, 1, -1, 1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 0, 1, 1, 1, 1, -1
 
 for i in new_array(arr):
     prophet(i)
-    print("Hole is {0} and profit is {1}".format(hole, profit))
+    print("Hole is {0} and profit is {1} and current_array is {2}".format(
+        hole, profit, current_array))
 print(profit)
-
-
-# for i in range(0, 20):
-#     increase_array()
-
-# for i in range(0, 3):
-#     reduce_array()
-
-# print(calculate_hole())
-
-print(profit)
-# print(loss)
