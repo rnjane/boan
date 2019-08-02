@@ -32,7 +32,10 @@ def calculate_current_value():
 def increase_array():
     global current_array
     size = len(current_array)
-    new_element = current_array[0] + current_array[size - 1]
+    if size == 1:
+        new_element = current_array[0]
+    else:
+        new_element = current_array[0] + current_array[size - 1]
     current_array.append(new_element)
     return current_array
 
@@ -67,19 +70,14 @@ def prophet(oneorzero):
         profit += 3
         calculate_hole()
     elif oneorzero == 0 and hole == 0:
-        # loss += calculate_current_value()
         profit -= calculate_current_value()
         increase_array()
         calculate_hole()
     elif oneorzero == 0 and hole > 0:
-        # loss += calculate_current_value()
         profit -= calculate_current_value()
         increase_array()
         calculate_hole()
     elif oneorzero == 1 and hole > 0:
-        # import pdb
-        # pdb.set_trace()
-        # loss -= calculate_current_value()
         profit += calculate_current_value()
         reduce_array()
         calculate_hole()
@@ -101,4 +99,10 @@ def new_array(old_array):
 def get_profit(arr):
     for i in new_array(arr):
         prophet(i)
+        # print("Hole is {0} and profit is {1} and current array is {2}".format(
+        #     hole, profit, current_array))
     return profit
+
+
+print(get_profit([0, 0, -1, -1, 1, -1, 1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 0, 1, 1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1,
+                  1, -1, 1, 1, 1, -1, -1, 1, 1, 0, -1, -1, -1, -1, 1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, -1, -1, -1]))
