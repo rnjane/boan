@@ -6,9 +6,9 @@ from boanapp import labouchere, logic
 def visualize_data(request):
     context = {}
     hourly_profit = []
-    hours = logic.get_moneies_list('AUDUSD', 2019, 7, 24)
+    hours = logic.get_moneies_list('AUDUSD', 2019, 7, 25)
     for hour in hours:
-        profit = labouchere.get_profit(hours[hour])
+        profit = labouchere.ProphetC().get_profit(hours[hour])
         hourly_profit.append(profit)
     context['pairs'] = assets
     context['profits'] = hourly_profit
