@@ -8,12 +8,17 @@ import pytz
 from iqoptionapi.stable_api import IQ_Option as api
 import pandas as pd
 from sqlalchemy import *
+
+
 assets = [
     "AUDUSD", "AUDCAD", "USDCHF", "EURNOK", "AUDNZD", "GBPJPY", "EURAUD", "AUDCHF", "GBPCHF",
     "GBPNZD", "EURGBP", "EURCAD", "EURNZD", "NZDCAD", "GBPCAD", "USDJPY", "NZDCHF", "USDNOK",
-    "EURUSD", "NZDJPY", "CADJPY", "GBPUSD", "AUDJPY", "USDCAD", "EURJPY", "CADCHF", "USDJPY-OTC",
+    "EURUSD", "NZDJPY", "CADJPY", "GBPUSD", "AUDJPY", "USDCAD", "EURJPY", "CADCHF"
+]
+
+assets_otc = [
     "EURUSD-OTC", "EURGBP-OTC", "USDCHF-OTC", "EURJPY-OTC", "NZDUSD-OTC", "AUDCAD-OTC",
-    "GBPUSD-OTC", "EURRUB-OTC", "USDRUB-OTC", "GBPJPY-OTC"
+    "GBPUSD-OTC", "USDJPY-OTC"
 ]
 
 
@@ -23,14 +28,28 @@ def convert_date_time_to_epoch(inputdate):
 
 
 def generate_times():
-    finish_time = 1564174799
+    finish_time = 1564185599
     times_list = []
     for i in range(10):
         converted_time = datetime.datetime.fromtimestamp(
-            finish_time, pytz.timezone("Africa/Nairobi")
+            finish_time, pytz.timezone("GMT")
         ).strftime("%Y-%m-%d %H:%M:%S")
         df = pd.Timestamp(converted_time)
         if df.dayofweek in range(0, 5):
+            times_list.append(finish_time)
+        finish_time -= 43200
+    return times_list
+
+
+def generate_otc_times():
+    finish_time = 1564185599
+    times_list = []
+    for i in range(14):
+        converted_time = datetime.datetime.fromtimestamp(
+            finish_time, pytz.timezone("GMT")
+        ).strftime("%Y-%m-%d %H:%M:%S")
+        df = pd.Timestamp(converted_time)
+        if df.dayofweek in range(5, 7):
             times_list.append(finish_time)
         finish_time -= 43200
     return times_list
@@ -49,12 +68,12 @@ def get_values():
     connection = engine.connect()
     metadata = MetaData()
     my_table = Table("boanapp_values", metadata, autoload_with=engine)
-    for instrument in assets:
+    for instrument in assets_otc:
         print("getting values for {}".format(instrument))
-        times = generate_times()
+        times = generate_otc_times()
         for time in times:
             cdle_list = []
-            my_candles = vals.get_candles(instrument, 60, 500, time)
+            my_candles = vals.get_candles(instrument, 60, 720, time)
             for candle in my_candles:
                 cdle = ast.literal_eval(json.dumps(candle))
                 del cdle["at"]
@@ -63,7 +82,7 @@ def get_values():
                 del cdle["volume"]
                 from_time = cdle["from"]
                 from_time_converted = datetime.datetime.fromtimestamp(
-                    from_time, pytz.timezone("Africa/Nairobi")
+                    from_time, pytz.timezone("GMT")
                 ).strftime("%Y-%m-%d %H:%M:%S")
                 del cdle["from"]
                 cdle["timer"] = from_time_converted
@@ -77,7 +96,7 @@ def get_values():
                     cdle["greenred"] = 1
 
                 wkday = pd.Timestamp(from_time_converted)
-                if wkday.weekday() in range(0, 5):
+                if wkday.weekday() in range(5, 7):
                     cdle_list.append(cdle)
                 else:
                     pass
