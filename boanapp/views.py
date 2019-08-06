@@ -13,6 +13,8 @@ def visualize_data(request):
     context['pairs'] = assets
     context['profits'] = hourly_profit
     context['hours'] = [hour for hour in range(24)]
+    context['start_date'] = logic.get_start_date()
+    context['end_date'] = logic.get_last_date()
     return render(request, 'index.html', context)
 
 

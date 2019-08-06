@@ -12,3 +12,15 @@ def get_moneies_list(asset, year, month, date):
         money_list = [record['money'] for record in queryset]
         money_dict[i] = money_list
     return money_dict
+
+
+def get_start_date():
+    start_date = models.ValuesMA.objects.filter(
+        pair="AUDUSD").values("timer").order_by('id')[0]
+    return start_date['timer'].strftime("%m/%d/%Y")
+
+
+def get_last_date():
+    last_date = models.ValuesMA.objects.filter(
+        pair="AUDUSD").values("timer").order_by('-id')[0]
+    return last_date['timer'].strftime("%m/%d/%Y")

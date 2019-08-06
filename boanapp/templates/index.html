@@ -13,6 +13,12 @@
     href="{% static 'styles/shards-dashboards.1.0.0.min.css' %}">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
 </head>
 
@@ -72,6 +78,8 @@
           <div class="page-header row no-gutters py-4">
             <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
               <h3 class="page-title">Data Analysis</h3>
+              {{ start_date }}
+              {{ end_date }}
             </div>
           </div>
           <!-- End Page Header -->
@@ -85,12 +93,13 @@
                 <div class="card-body pt-0">
                   <div class="row border-bottom py-2 bg-light">
                     <div class="col-12 col-sm-2">
-                      <div id="blog-overview-date-range"
+                    
+                      <div
                         class="input-daterange input-group input-group-sm my-auto ml-auto mr-auto ml-sm-auto mr-sm-0"
                         style="max-width: 350px;">
-                        <input type="text" class="input-sm form-control" name="start" placeholder="Date"
-                          id="blog-overview-date-range-1">
+                        <input type="text" name="boan-date" class="input-sm form-control"/>
 
+                        
                         <span class="input-group-append">
                           <span class="input-group-text">
                             <i class="material-icons"></i>
@@ -182,9 +191,17 @@
     }
     });
   </script>
-
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script>
+$(function() {
+  $('input[name="boan-date"]').daterangepicker({
+    singleDatePicker: true,
+    showDropdowns: true,
+    minDate: "{{ end_date }}",
+    maxDate: "{{ start_date }}"
+  });
+});
+</script>
+ 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
   <script src="https://unpkg.com/shards-ui@latest/dist/js/shards.min.js"></script>
