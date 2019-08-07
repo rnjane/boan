@@ -1,79 +1,8 @@
+{% extends "base.html" %}
 {% load static %}
-<!doctype html>
-<html class="no-js h-100" lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <title>Njane Labs - Data Science of Currencies</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="stylesheet" id="main-stylesheet" data-version="1.0.0"
-    href="{% static 'styles/shards-dashboards.1.0.0.min.css' %}">
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-  
-
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
-</head>
-
-<body class="h-100">
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Main Sidebar -->
-      <aside class="main-sidebar col-12 col-md-3 col-lg-2 px-0">
-        <div class="main-navbar">
-          <nav class="navbar align-items-stretch navbar-light bg-white flex-md-nowrap border-bottom p-0">
-            <a class="navbar-brand w-100 mr-0" href="{% url 'index' %}" style="line-height: 25px;">
-              <div class="d-table m-auto">
-                <img id="main-logo" class="d-inline-block align-top mr-1" style="max-width: 25px;"
-                  src="{% static "images/shards-dashboards-logo.svg" %}" alt="Shards Dashboard">
-                <span class="d-none d-md-inline ml-1">Njane Labs</span>
-              </div>
-            </a>
-            <a class="toggle-sidebar d-sm-inline d-md-none d-lg-none">
-              <i class="material-icons">&#xE5C4;</i>
-            </a>
-          </nav>
-        </div>
-        <div class="nav-wrapper">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'get_data'%}">
-                <i class="material-icons">note_add</i>
-                <span>Get Data</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'visualize_data'%}">
-                <i class="material-icons">insert_chart</i>
-                <span>Data Analysis</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </aside>
-      <!-- End Main Sidebar -->
-      <main class="main-content col-lg-10 col-md-9 col-sm-12 p-0 offset-lg-2 offset-md-3">
-        <div class="main-navbar sticky-top bg-white">
-          <!-- Main Navbar -->
-          <nav class="navbar align-items-stretch navbar-light flex-md-nowrap p-0">
-
-            <nav class="nav">
-              <a href="#" class="nav-link nav-link-icon toggle-sidebar d-md-inline d-lg-none text-center border-left"
-                data-toggle="collapse" data-target=".header-navbar" aria-expanded="false" aria-controls="header-navbar">
-                <i class="material-icons">&#xE5D2;</i>
-              </a>
-            </nav>
-          </nav>
-        </div>
-        <!-- / .main-navbar -->
-        <div class="main-content-container container-fluid px-4">
+{% block title %}Njane Labs - Data Science of Currencies{% endblock %}
+{% block content %}
+  <div class="main-content-container container-fluid px-4">
           <!-- Page Header -->
           <div class="page-header row no-gutters py-4">
             <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
@@ -82,121 +11,52 @@
           </div>
           <!-- End Page Header -->
           <div class="row">
-            <!-- Users Stats -->
-            <div class="col-lg-12 col-md-12 col-sm-12 mb-4">
-              <div class="card card-small">
-                <div class="card-header border-bottom">
-                  <h6 class="m-0">Time</h6>
-                </div>
-                <div class="card-body pt-0">
-                  <div class="row border-bottom py-2 bg-light">
-                  <form method="POST" action='/visualize-specified-data/'>
-                  {% csrf_token %}
-                  <div class="form-row">
-                    <div class="form-group col-md-4">
-                      <div class="input-daterange input-group input-group-sm my-auto ml-auto mr-auto ml-sm-auto mr-sm-0"
-                        style="max-width: 350px;">
-                        <input type="text" name="boan-date" class="input-sm form-control" value="{{ current_date }}"/>
-                        <span class="input-group-append">
-                          <span class="input-group-text">
-                            <i class="material-icons"></i>
-                          </span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-4">
-                      <select class="custom-select custom-select-sm" style="max-width: 130px;" name="asset">
-                        {% if current_asset %}
-                          <option selected>{{ current_asset }}</option>
-                        {% endif %}
-                        {% for pair in pairs %}
-                        <option value={{pair}}>{{pair}}</option>
-                        {% endfor %}
-
-                      </select>
-                    </div>
-                    <div class="form-group col-md-4">
-                      <button type="submit"
-                        class="btn btn-sm btn-white ml-auto mr-auto ml-sm-auto mr-sm-0 mt-3 mt-sm-0">Get Data
-                        </button>
-                    </div>
-                    </div>
-                    </form>
-                    
-                  </div>
-                  <canvas id="myChart" height="120"></canvas>
-                  <!-- <canvas class="blog-overview-stats-small-4" id="myChart"></canvas> -->
-                </div>
-              </div>
+  <div class="col-lg-12 col-md-12 col-sm-12 mb-4">
+    <div class="card card-small">
+      <div class="card-header border-bottom">
+        <h6 class="m-0">Time</h6>
+      </div>
+      <div class="card-body pt-0">
+        <div class="row border-bottom py-2 bg-light">
+        <form method="POST" action='/visualize-specified-data/'>
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <div class="input-daterange input-group input-group-sm my-auto ml-auto mr-auto ml-sm-auto mr-sm-0"
+              style="max-width: 350px;">
+              <input type="text" name="boan-date" class="input-sm form-control" value="{{ current_date }}"/>
+              <span class="input-group-append">
+                <span class="input-group-text">
+                  <i class="material-icons"></i>
+                </span>
+              </span>
             </div>
-            <!-- End Users Stats -->
-
-            <!-- End New Draft Component -->
           </div>
+          <div class="form-group col-md-4">
+            <select class="custom-select custom-select-sm" style="max-width: 130px;" name="asset">
+              {% if current_asset %}
+                <option selected>{{ current_asset }}</option>
+              {% endif %}
+              {% for pair in pairs %}
+              <option value={{pair}}>{{pair}}</option>
+              {% endfor %}
+
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <button type="submit"
+              class="btn btn-sm btn-white ml-auto mr-auto ml-sm-auto mr-sm-0 mt-3 mt-sm-0">Get Data
+              </button>
+          </div>
+          </div>
+          </form>
+          
         </div>
-        <footer class="main-footer d-flex p-2 px-3 bg-white border-top">
-          <ul class="nav">
-            <li class="nav-item">
-              <a class="nav-link" href="#">About US</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Blog</a>
-            </li>
-          </ul>
-          <span class="copyright ml-auto my-auto mr-2">Copyright © 2019
-            <a href="https://njanelabs.com" rel="nofollow">Njane Labs</a>
-          </span>
-        </footer>
-      </main>
+        <canvas id="myChart" height="120"></canvas>
+        <!-- <canvas class="blog-overview-stats-small-4" id="myChart"></canvas> -->
+      </div>
     </div>
   </div>
-  <script>
-    var ctx = document.getElementById('myChart');
-    var myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: {{ hours }},
-    datasets: [{
-      label: 'Current Month',
-      fill: 'start',
-      data: {{ profits }},
-      backgroundColor: 'rgba(0,123,255,0.1)',
-      borderColor: 'rgba(0,123,255,1)',
-      pointBackgroundColor: '#ffffff',
-      pointHoverBackgroundColor: 'rgb(0,123,255)',
-      borderWidth: 1.5,
-      pointRadius: 0,
-      pointHoverRadius: 3
-    }]},
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            // beginAtZero: true,
-          }
-        }]
-      }
-    }
-    });
-  </script>
-  <script>
-$(function() {
-  $('input[name="boan-date"]').daterangepicker({
-    singleDatePicker: true,
-    showDropdowns: true,
-    minDate: "{{ end_date }}",
-    maxDate: "{{ start_date }}"
-  });
-});
-</script>
- 
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
-  <script src="https://unpkg.com/shards-ui@latest/dist/js/shards.min.js"></script>
-
-  <script src="{% static 'scripts/app/app-blog-overview.1.0.0.js' %}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
-
-</body>
-
-</html>
+  </div>
+        </div>
+{% endblock %}
