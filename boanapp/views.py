@@ -36,6 +36,7 @@ def visulize_defined_data(request):
     hours = logic.get_moneies_list(request.POST.get(
         'asset'), split_date[2], split_date[0], split_date[1])
     for hour in hours:
+        print(hour, len(hours[hour]), hours[hour])
         profit = labouchere.ProphetC().get_profit(hours[hour])
         hourly_profit.append(profit)
     context['pairs'] = assets

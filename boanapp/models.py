@@ -34,3 +34,13 @@ class ValuesLen(models.Model):
     ma14 = models.DecimalField(max_digits=15, decimal_places=8)
     money = models.IntegerField(db_index=True)
     ignore = models.BooleanField()
+
+
+class ValuesComplete(models.Model):
+    min = models.DecimalField(max_digits=15, decimal_places=8)
+    max = models.DecimalField(max_digits=15, decimal_places=8)
+    greenred = models.IntegerField()
+    timer = models.DateTimeField()
+    open = models.DecimalField(max_digits=15, decimal_places=8)
+    close = models.DecimalField(max_digits=15, decimal_places=8)
+    pair = models.CharField(max_length=10)
