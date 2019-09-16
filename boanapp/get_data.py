@@ -10,9 +10,13 @@ import pandas as pd
 from sqlalchemy import *
 
 
+# assets = [
+#     "AUDUSD", "AUDCAD", "USDCHF", "EURNOK", "AUDNZD", "GBPJPY", "EURAUD", "AUDCHF", "GBPCHF",
+#     "GBPNZD", "EURGBP", "EURCAD", "EURNZD", "NZDCAD", "GBPCAD", "USDJPY", "NZDCHF", "USDNOK",
+#     "EURUSD", "NZDJPY", "CADJPY", "GBPUSD", "AUDJPY", "USDCAD", "EURJPY", "CADCHF"
+# ]
+
 assets = [
-    "AUDUSD", "AUDCAD", "USDCHF", "EURNOK", "AUDNZD", "GBPJPY", "EURAUD", "AUDCHF", "GBPCHF",
-    "GBPNZD", "EURGBP", "EURCAD", "EURNZD", "NZDCAD", "GBPCAD", "USDJPY", "NZDCHF", "USDNOK",
     "EURUSD", "NZDJPY", "CADJPY", "GBPUSD", "AUDJPY", "USDCAD", "EURJPY", "CADCHF"
 ]
 
@@ -30,28 +34,28 @@ def convert_date_time_to_epoch(inputdate):
 def generate_times():
     finish_time = 1564185599
     times_list = []
-    for i in range(10):
-        converted_time = datetime.datetime.fromtimestamp(
-            finish_time, pytz.timezone("GMT")
-        ).strftime("%Y-%m-%d %H:%M:%S")
+    converted_time = datetime.datetime.fromtimestamp(
+        finish_time, pytz.timezone("GMT")
+    ).strftime("%Y-%m-%d %H:%M:%S")
+    for i in range(670):
         df = pd.Timestamp(converted_time)
         if df.dayofweek in range(0, 5):
             times_list.append(finish_time)
-        finish_time -= 43200
+        finish_time -= 60000
     return times_list
 
 
 def generate_otc_times():
     finish_time = 1564185599
     times_list = []
-    for i in range(14):
-        converted_time = datetime.datetime.fromtimestamp(
-            finish_time, pytz.timezone("GMT")
-        ).strftime("%Y-%m-%d %H:%M:%S")
+    converted_time = datetime.datetime.fromtimestamp(
+        finish_time, pytz.timezone("GMT")
+    ).strftime("%Y-%m-%d %H:%M:%S")
+    for i in range(84):
         df = pd.Timestamp(converted_time)
         if df.dayofweek in range(5, 7):
             times_list.append(finish_time)
-        finish_time -= 43200
+        finish_time -= 60000
     return times_list
 
 
@@ -67,13 +71,13 @@ def get_values():
     engine = create_engine(os.environ.get('sqlalchemy_uri'))
     connection = engine.connect()
     metadata = MetaData()
-    my_table = Table("boanapp_values", metadata, autoload_with=engine)
-    for instrument in assets_otc:
+    my_table = Table("boanapp_valuescomplete", metadata, autoload_with=engine)
+    for instrument in assets:
         print("getting values for {}".format(instrument))
-        times = generate_otc_times()
+        times = generate_times()
         for time in times:
             cdle_list = []
-            my_candles = vals.get_candles(instrument, 60, 720, time)
+            my_candles = vals.get_candles(instrument, 60, 1000, time)
             for candle in my_candles:
                 cdle = ast.literal_eval(json.dumps(candle))
                 del cdle["at"]
@@ -96,7 +100,7 @@ def get_values():
                     cdle["greenred"] = 1
 
                 wkday = pd.Timestamp(from_time_converted)
-                if wkday.weekday() in range(5, 7):
+                if wkday.weekday() in range(0, 5):
                     cdle_list.append(cdle)
                 else:
                     pass

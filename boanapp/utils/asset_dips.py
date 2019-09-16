@@ -15,8 +15,8 @@ def get_start_date(table):
 
 
 def get_all_dates(table):
-    all_dates = pd.date_range(start=get_last_date(table),
-                              end=get_start_date(table)).strftime("%m/%d/%Y").to_list()
+    all_dates = pd.date_range(start=get_start_date(table),
+                              end=get_last_date(table)).strftime("%m/%d/%Y").to_list()
     return all_dates
 
 
@@ -29,8 +29,9 @@ queryset = session.query(length_table).filter(
 def get_moneies_list(table, asset, year, month, date):
     money_dict = {}
     for i in range(24):
-        queryset = session.query(length_table).filter_by(pair=asset).filter(extract('year', 'timer') == year).filter(extract(
-            'month', 'timer') == month).filter(extract('day', 'timer') == date).filter(extract('hour', 'timer') == 10).all()
+        queryset = session.query(length_table).filter_by(pair=asset).filter(
+            extract('year', length_table.c.timer) == year, extract(
+                'month', length_table.c.timer) == month, extract('day', length_table.c.timer) == date, extract('hour', length_table.c.timer) == 10).all()
 
         queryset = models.ValuesLen.objects.filter(
             pair=asset, timer__year=year, timer__month=month, timer__day=date, timer__hour=i, ignore=False).values("money").order_by('timer')
