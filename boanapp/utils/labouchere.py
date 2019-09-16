@@ -100,7 +100,7 @@ class ProphetC():
         return new_list
 
     def get_profit(self, arr):
-        for i in self.new_array(arr):
+        for i in arr:
             self.prophet(i)
             # print("Hole is {0} and profit is {1} and current array is {2}".format(
             #     self._hole, self._profit, self._current_array))
