@@ -1,5 +1,5 @@
 import psycopg2
-from sqlalchemy import extract, Table, create_engine, MetaData
+from sqlalchemy import extract, Table, create_engine, MetaData, desc, asc
 from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
@@ -48,7 +48,7 @@ def get_moneies_list(table, asset, year, month, date):
     for i in range(24):
         queryset = session.query(length_table).filter_by(pair=asset, ignore=False).filter(
             extract('year', length_table.c.timer) == year, extract(
-                'month', length_table.c.timer) == month, extract('day', length_table.c.timer) == date, extract('hour', length_table.c.timer) == 10).all()
+                'month', length_table.c.timer) == month, extract('day', length_table.c.timer) == date, extract('hour', length_table.c.timer) == i).all()
         money_dict[i] = new_array([record.money for record in queryset])
     return money_dict
 
