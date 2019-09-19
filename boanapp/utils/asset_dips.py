@@ -6,20 +6,6 @@ from talib import abstract
 import os
 
 
-def get_last_date(table):
-    return session.query(table).filter_by(pair='AUDUSD').order_by(desc('timer')).first().timer.strftime("%m/%d/%Y")
-
-
-def get_start_date(table):
-    return session.query(table).filter_by(pair='AUDUSD').order_by(asc('timer')).first().timer.strftime("%m/%d/%Y")
-
-
-def get_all_dates(table):
-    all_dates = pd.date_range(start=get_start_date(table),
-                              end=get_last_date(table)).strftime("%m/%d/%Y").to_list()
-    return all_dates
-
-
 queryset = session.query(length_table).filter_by(pair=asset).all()
 
 queryset = session.query(length_table).filter(

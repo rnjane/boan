@@ -1,5 +1,5 @@
 import psycopg2
-from sqlalchemy import *
+from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
 from talib import abstract
@@ -21,7 +21,7 @@ assets = [
 engine = create_engine(os.environ.get('sqlalchemy_uri'))
 connection = engine.connect()
 metadata = MetaData()
-# my_table = Table("boanapp_values", metadata, autoload_with=engine)
+# my_table = Table("boanapp_valuescomplete", metadata, autoload_with=engine)
 
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -62,12 +62,14 @@ session = Session()
 #             new_list.append(i)
 
 #         print("saving data for {}".format(asset))
-#         table2 = Table("boanapp_valuesma", metadata, autoload_with=engine)
+#         table2 = Table("boanapp_valuesmacomplete",
+#                        metadata, autoload_with=engine)
 #         connection.execute(table2.insert(), new_list)
 #     except Exception as e:
 #         pass
 
-length_table = Table("boanapp_valuesma", metadata, autoload_with=engine)
+length_table = Table("boanapp_valuesmacomplete",
+                     metadata, autoload_with=engine)
 for asset in assets:
     try:
         print("Getting data for {}".format(asset))
@@ -94,7 +96,8 @@ for asset in assets:
             new_list.append(i)
 
         print("saving data for {}".format(asset))
-        table2 = Table("boanapp_valueslen", metadata, autoload_with=engine)
+        table2 = Table("boanapp_valueslencomplete",
+                       metadata, autoload_with=engine)
         connection.execute(table2.insert(), new_list)
     except Exception as e:
         pass
