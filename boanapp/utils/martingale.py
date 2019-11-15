@@ -1,14 +1,14 @@
 ls = [0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0]
-time_ls = [(-1, datetime.datetime(2019, 7, 26, 1, 20, tzinfo= < UTC >)),
-           (-1, datetime.datetime(2019, 7, 26, 1, 21, tzinfo= < UTC > )),
-           (-1, datetime.datetime(2019, 7, 26, 1, 22, tzinfo= < UTC >)),
-           (0, datetime.datetime(2019, 7, 26, 1, 23, tzinfo= < UTC > )),
-           (-1, datetime.datetime(2019, 7, 26, 1, 24, tzinfo= < UTC >)),
-           (-1, datetime.datetime(2019, 7, 26, 1, 25, tzinfo= < UTC > )),
-           (-1, datetime.datetime(2019, 7, 26, 1, 26, tzinfo= < UTC >)),
-           (-1, datetime.datetime(2019, 7, 26, 1, 27, tzinfo= < UTC > )),
-           (-1, datetime.datetime(2019, 7, 26, 1, 28, tzinfo= < UTC >)),
-           (-1, datetime.datetime(2019, 7, 26, 1, 29, tzinfo= < UTC > ))]
+time_ls = [(-1, datetime.datetime(2019, 7, 26, 1, 20, tzinfo= < UTC > )),
+           (-1, datetime.datetime(2019, 7, 26, 1, 21, tzinfo= < UTC >)),
+           (-1, datetime.datetime(2019, 7, 26, 1, 22, tzinfo= < UTC > )),
+           (0, datetime.datetime(2019, 7, 26, 1, 23, tzinfo= < UTC >)),
+           (-1, datetime.datetime(2019, 7, 26, 1, 24, tzinfo= < UTC > )),
+           (-1, datetime.datetime(2019, 7, 26, 1, 25, tzinfo= < UTC >)),
+           (-1, datetime.datetime(2019, 7, 26, 1, 26, tzinfo= < UTC > )),
+           (-1, datetime.datetime(2019, 7, 26, 1, 27, tzinfo= < UTC >)),
+           (-1, datetime.datetime(2019, 7, 26, 1, 28, tzinfo= < UTC > )),
+           (-1, datetime.datetime(2019, 7, 26, 1, 29, tzinfo= < UTC >))]
 
 
 def new_array(old_array):
@@ -63,6 +63,8 @@ def return_martin_with_time(input_array):
     zero_count = 0
     start_time = None
     for i in input_array:
+        if i[0] == 1 and zero_count == 0:
+            previous = 1
         if i[0] == 0 and previous == 1:
             start_time = i[1]
             zero_count = 1
@@ -71,7 +73,10 @@ def return_martin_with_time(input_array):
             zero_count += 1
             previous = 0
         elif i[0] == 1 and zero_count > 0:
-            returned_list.append((zero_count, (start_time, i[1])))
+            if zero_count >= 7:
+                returned_list.append((zero_count, (start_time, i[1])))
+            else:
+                pass
             start_time = None
             zero_count = 0
             previous = 1
