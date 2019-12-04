@@ -73,7 +73,7 @@ def return_martin_with_time(input_array):
             zero_count += 1
             previous = 0
         elif i[0] == 1 and zero_count > 0:
-            if zero_count >= 7:
+            if zero_count >= 5:
                 returned_list.append((zero_count, (start_time, i[1])))
             else:
                 pass

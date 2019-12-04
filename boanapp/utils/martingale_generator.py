@@ -1,7 +1,7 @@
 def martingale():
     returned_list = []
     all_losses = 0
-    for i in range(1, 10):
+    for i in range(1, 40):
         y = all_losses / 0.8
         returned_list.append(round(y + 1, 2))
         all_losses += (y + 1)

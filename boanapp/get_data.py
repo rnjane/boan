@@ -17,13 +17,13 @@ from sqlalchemy import *
 # ]
 
 assets = [
-    "EURUSD", "NZDJPY", "CADJPY", "GBPUSD", "AUDJPY", "USDCAD", "EURJPY", "CADCHF"
+    "GBPJPY"
 ]
 
-assets_otc = [
-    "EURUSD-OTC", "EURGBP-OTC", "USDCHF-OTC", "EURJPY-OTC", "NZDUSD-OTC", "AUDCAD-OTC",
-    "GBPUSD-OTC", "USDJPY-OTC"
-]
+# assets_otc = [
+#     "EURUSD-OTC", "EURGBP-OTC", "USDCHF-OTC", "EURJPY-OTC", "NZDUSD-OTC", "AUDCAD-OTC",
+#     "GBPUSD-OTC", "USDJPY-OTC"
+# ]
 
 
 def convert_date_time_to_epoch(inputdate):
@@ -71,41 +71,40 @@ def get_values():
     engine = create_engine(os.environ.get('sqlalchemy_uri'))
     connection = engine.connect()
     metadata = MetaData()
-    my_table = Table("boanapp_valuescomplete", metadata, autoload_with=engine)
+    my_table = Table("boanapp_valuestest", metadata, autoload_with=engine)
     for instrument in assets:
         print("getting values for {}".format(instrument))
-        times = generate_times()
-        for time in times:
-            cdle_list = []
-            my_candles = vals.get_candles(instrument, 60, 1000, time)
-            for candle in my_candles:
-                cdle = ast.literal_eval(json.dumps(candle))
-                del cdle["at"]
-                del cdle["to"]
-                del cdle["id"]
-                del cdle["volume"]
-                from_time = cdle["from"]
-                from_time_converted = datetime.datetime.fromtimestamp(
-                    from_time, pytz.timezone("GMT")
-                ).strftime("%Y-%m-%d %H:%M:%S")
-                del cdle["from"]
-                cdle["timer"] = from_time_converted
-                cdle["pair"] = instrument
-                greenred = cdle["close"] - cdle["open"]
-                if greenred < 0:
-                    cdle["greenred"] = -1
-                elif greenred == 0:
-                    cdle["greenred"] = 0
-                else:
-                    cdle["greenred"] = 1
 
-                wkday = pd.Timestamp(from_time_converted)
-                if wkday.weekday() in range(0, 5):
-                    cdle_list.append(cdle)
-                else:
-                    pass
-            # print("Saving values for {}".format(instrument))
-            connection.execute(my_table.insert(), cdle_list)
+        my_candles = vals.get_candles(instrument, 60, 1000, time.time())
+        cdle_list = []
+        for candle in my_candles:
+            cdle = ast.literal_eval(json.dumps(candle))
+            del cdle["at"]
+            del cdle["to"]
+            del cdle["id"]
+            del cdle["volume"]
+            from_time = cdle["from"]
+            from_time_converted = datetime.datetime.fromtimestamp(
+                from_time, pytz.timezone("UTC")
+            ).strftime("%Y-%m-%d %H:%M:%S")
+            del cdle["from"]
+            cdle["timer"] = from_time_converted
+            cdle["pair"] = instrument
+            greenred = cdle["close"] - cdle["open"]
+            if greenred < 0:
+                cdle["greenred"] = -1
+            elif greenred == 0:
+                cdle["greenred"] = 0
+            else:
+                cdle["greenred"] = 1
+
+            wkday = pd.Timestamp(from_time_converted)
+            if wkday.weekday() in range(0, 5):
+                cdle_list.append(cdle)
+            else:
+                pass
+        print("Saving values for {}".format(instrument))
+        connection.execute(my_table.insert(), cdle_list)
 
 
 get_values()

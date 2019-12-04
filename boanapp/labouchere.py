@@ -102,10 +102,10 @@ class ProphetC():
     def get_profit(self, arr):
         for i in self.new_array(arr):
             self.prophet(i)
-            # print("Hole is {0} and profit is {1} and current array is {2}".format(
-            #     self._hole, self._profit, self._current_array))
+            print("Hole is {0} and profit is {1} and current array is {2}".format(
+                self._hole, self._profit, self._current_array))
         return self._profit
 
 
-# cl = ProphetC()
-# print(cl.get_profit([1,0,0,1,0,0,1,0,0,0,1,1,1,0,0,1,0,1,0,1,0,1,0,0,0,1,0,0,0,1,1,1,1,0,1,0,0,1,0,1,0,0,0,1,1,1]))
+cl = ProphetC()
+print(cl.get_profit([1, 1, 1, -1, 1, -1, 1, -1, -1, 1, 1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, 0, -1, -1, -1, -1, -1, 0, -1, 1, 0, 0, -1, -1, -1, -1, 1, 1, -1, 1, 1, -1, -1, -1, 0, 0, 1, 1, -1, 0, -1, 1, -1, -1, 1, -1, 0, 1, -1]))

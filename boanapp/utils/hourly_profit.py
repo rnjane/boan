@@ -48,7 +48,7 @@ def get_moneies_list(table, asset, year, month, date):
     for i in range(24):
         queryset = session.query(length_table).filter_by(pair=asset, ignore=False).filter(
             extract('year', length_table.c.timer) == year, extract(
-                'month', length_table.c.timer) == month, extract('day', length_table.c.timer) == date, extract('hour', length_table.c.timer) == i).all()
+                'month', length_table.c.timer) == month, extract('day', length_table.c.timer) == date, extract('hour', length_table.c.timer) == i).order_by(asc('timer')).all()
         money_dict[i] = new_array([record.money for record in queryset])
     return money_dict
 
@@ -76,12 +76,16 @@ def get_hourly_profit(asset):
     return f"done with {asset}"
 
 
+# assets = [
+#     "AUDUSD", "AUDCAD", "USDCHF", "EURNOK", "AUDNZD", "GBPJPY", "EURAUD", "AUDCHF", "GBPCHF",
+#     "GBPNZD", "EURGBP", "EURCAD", "EURNZD", "NZDCAD", "GBPCAD", "USDJPY", "NZDCHF", "USDNOK",
+#     "EURUSD", "NZDJPY", "CADJPY", "GBPUSD", "AUDJPY", "USDCAD", "EURJPY", "CADCHF", "USDJPY-OTC",
+#     "EURUSD-OTC", "EURGBP-OTC", "USDCHF-OTC", "EURJPY-OTC", "NZDUSD-OTC", "AUDCAD-OTC",
+#     "GBPUSD-OTC", "EURRUB-OTC", "USDRUB-OTC", "GBPJPY-OTC"
+# ]
+
 assets = [
-    "AUDUSD", "AUDCAD", "USDCHF", "EURNOK", "AUDNZD", "GBPJPY", "EURAUD", "AUDCHF", "GBPCHF",
-    "GBPNZD", "EURGBP", "EURCAD", "EURNZD", "NZDCAD", "GBPCAD", "USDJPY", "NZDCHF", "USDNOK",
-    "EURUSD", "NZDJPY", "CADJPY", "GBPUSD", "AUDJPY", "USDCAD", "EURJPY", "CADCHF", "USDJPY-OTC",
-    "EURUSD-OTC", "EURGBP-OTC", "USDCHF-OTC", "EURJPY-OTC", "NZDUSD-OTC", "AUDCAD-OTC",
-    "GBPUSD-OTC", "EURRUB-OTC", "USDRUB-OTC", "GBPJPY-OTC"
+    "AUDUSD", "AUDCAD"
 ]
 
 for asset in assets:
