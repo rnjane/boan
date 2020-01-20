@@ -62,42 +62,42 @@ for asset in assets:
     except Exception as e:
         print(e)
 
-# length_table = Table("boanapp_valuesma25",
-#                      metadata, autoload_with=engine)
-# for asset in assets:
-#     try:
-#         print("Getting data for {}".format(asset))
-#         # query the table that has the data we need, and a specific asset
-#         y2 = session.query(length_table).filter_by(pair=asset)
+length_table = Table("boanapp_valuesma25",
+                     metadata, autoload_with=engine)
+for asset in assets:
+    try:
+        print("Getting data for {}".format(asset))
+        # query the table that has the data we need, and a specific asset
+        y2 = session.query(length_table).filter_by(pair=asset)
 
-#         # read the sql object into a pandas data frame
-#         df2 = pd.read_sql(y2.statement, y2.session.bind)
+        # read the sql object into a pandas data frame
+        df2 = pd.read_sql(y2.statement, y2.session.bind)
 
-#         # sort, and convert the pandas object into a python dictionary
-#         df2.sort_values(by="timer")
+        # sort, and convert the pandas object into a python dictionary
+        df2.sort_values(by="timer")
 
-#         j2 = df2.to_dict(orient="index")
+        j2 = df2.to_dict(orient="index")
 
-#         # find length of candles, and if MA is in them
-#         skip = False
-#         for dic in j2.values():
-#             if skip:
-#                 dic["ignore"] = True
-#             else:
-#                 dic["ignore"] = False
+        # find length of candles, and if MA is in them
+        skip = False
+        for dic in j2.values():
+            if skip:
+                dic["ignore"] = True
+            else:
+                dic["ignore"] = False
 
-#             if dic["min"] < dic["ma14"] < dic["max"]:
-#                 skip = True
-#             else:
-#                 skip = False
+            if dic["min"] < dic["ma14"] < dic["max"]:
+                skip = True
+            else:
+                skip = False
 
-#         new_list = []
-#         for i in j2.values():
-#             new_list.append(i)
+        new_list = []
+        for i in j2.values():
+            new_list.append(i)
 
-#         print("saving data for {}".format(asset))
-#         table2 = Table("boanapp_valueslen25",
-#                        metadata, autoload_with=engine)
-#         connection.execute(table2.insert(), new_list)
-#     except Exception as e:
-#         pass
+        print("saving data for {}".format(asset))
+        table2 = Table("boanapp_valueslen25",
+                       metadata, autoload_with=engine)
+        connection.execute(table2.insert(), new_list)
+    except Exception as e:
+        pass

@@ -55,7 +55,7 @@ def return_martin(input_array):
         returned_list.append(zero_count)
     return sorted(returned_list, reverse=True)
 
-
+xval =  5
 def return_martin_with_time(input_array):
     input_array = new_array_with_time(input_array)
     returned_list = []
@@ -65,15 +65,21 @@ def return_martin_with_time(input_array):
     for i in input_array:
         if i[0] == 1 and zero_count == 0:
             previous = 1
-        if i[0] == 0 and previous == 1:
+        elif i[0] == 0 and previous == 1:
             start_time = i[1]
             zero_count = 1
             previous = 0
         elif i[0] == 0 and previous == 0:
-            zero_count += 1
-            previous = 0
+            if zero_count >= xval:
+                returned_list.append((zero_count, (start_time, i[1])))
+                start_time = None
+                zero_count = 0
+                previous = 1
+            else:
+                zero_count += 1
+                previous = 0
         elif i[0] == 1 and zero_count > 0:
-            if zero_count >= 5:
+            if zero_count >= xval:
                 returned_list.append((zero_count, (start_time, i[1])))
             else:
                 pass
